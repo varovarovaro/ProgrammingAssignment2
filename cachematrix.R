@@ -1,28 +1,27 @@
 ## I tried to replicate the example almost exactly. Only 
 ## substituting the numeric values for matrices and mean function for solve.
 
-
 makeCacheMatrix <- function(x = matrix()) {
-  inv = NULL
-  set = function(y) {
+  m <- NULL
+  set <- function(y) {
     x <<- y
-    inv <<- NULL
+    m <<- NULL
   }
-  get = function() x
-  setinv = function(inverse) inv <<- inverse 
-  getinv = function() inv
-  list(set=set, get=get, setinv=setinv, getinv=getinv)
+  get <- function() x
+  setsolve <- function(solve) m <<- solve
+  getsolve <- function() m
+  list(set = set, get = get,
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
-CacheSolve<-function(x, ...) {
-  inv = x$getinv()
-  if (!is.null(inv)){
-    message("Using cached result")
-    return(inv)
+cacheSolve <- function(x, ...) {
+  m <- x$getsolve()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
   }
-  data = x$get()
-  inv = solve(data, ...)
-  x$setinv(inv)
-  
-  return(inv)
+  data <- x$get()
+  m <- solve(data, ...)
+  x$setsolve(m)
 }
